@@ -1,7 +1,7 @@
 from netmiko import ConnectHandler
 from getpass import getpass
 
-# This will turn the string into a list of strings
+# This will turn the string into a list of strings. Each string equals the router IP 
 devices = '''
 172.16.1.1
 172.16.2.1
