@@ -1,0 +1,36 @@
+---
+  #always good to name your plays so it becomes human readable
+- name: "PLAY 1: Show router configs and store result"
+  #hosts refers to the routers group in the hosts.yml file
+  hosts: routers
+  #connect 
+  connection: network_cli
+  tasks:
+    - name: "TASK 1: Get router interface config output from all routers"
+      ios_command:
+        commands: "show interface brief "
+        # you can run multiple commands with the "-" before the command name and without quotes around it like so
+        # commands:
+        # - show version
+        # - show interfaces
+      register: interface_result
+
+    - name: "TASK 2: Print router interface configs"
+      #debug module is used for printing statements during execution
+      #the output will be in a json "ugly format" so Task 3 and 4 will fix thie issue
+      #by 
+      debug:
+        msg: {{ interface_result }}
+
+    - name: "TASK 3: Create outputs/ folder"
+      file:
+        path: "outputs"
+        state: directory
+      run_once: true
+    
+    - name: "TASK 4: Write output to file"
+      copy:
+        content: "{{ cli_result.stdout[0] }}\n"
+        dest: "outputs/{{ inventory_hostname }}.txt"
+        #is the name of the hostname as configured in Ansible’s inventory host file. This can be useful when you’ve disabled fact-gathering, or you don’t want to rely on the discovered hostname
+      

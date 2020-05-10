@@ -1,0 +1,23 @@
+---
+
+- name: General Config
+
+  hosts: routers
+
+  tasks: 
+
+
+  - name: Add Banner
+    ios_banner:
+      banner: login
+      text:
+        Tony Baloney will succeed!
+      state: present
+
+  - name: Add loopback
+
+    ios_interface:
+      name: Loopback21
+      state: present
+    
+
