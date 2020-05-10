@@ -13,6 +13,7 @@
         # commands:
         # - show version
         # - show interfaces
+      #register holds the output that is saved into interface_result
       register: interface_result
 
     - name: "TASK 2: Print router interface configs"
@@ -33,4 +34,6 @@
         content: "{{ cli_result.stdout[0] }}\n"
         dest: "outputs/{{ inventory_hostname }}.txt"
         #is the name of the hostname as configured in Ansible’s inventory host file. This can be useful when you’ve disabled fact-gathering, or you don’t want to rely on the discovered hostname
+
+        #in this case, task 4 will generate R1-R4 txt file name with the output of sh int brief output
       
