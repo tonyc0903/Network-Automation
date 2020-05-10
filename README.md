@@ -5,5 +5,5 @@ This repository contain scripts for my network automation journey
 
 Helpful tips for me along the way:
 
-##This command privodes an offline version of documentation of all the tasks associated with the modulename
-```ansible-doc modulename```
+## This command privodes an offline version of documentation of all the tasks associated with the modulename
+`ansible-doc modulename`
