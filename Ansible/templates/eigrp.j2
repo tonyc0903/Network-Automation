@@ -1,0 +1,4 @@
+router eigrp {{ eigrp.num }}
+{% for network in eigrp.network %}
+    network {{ network }}
+{% end for %}}
