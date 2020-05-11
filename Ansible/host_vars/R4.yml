@@ -1,0 +1,8 @@
+---
+hostname:
+  name: R4
+
+eigrp:
+  num: 1
+  network: ["172.16.4.0 255.255.255.0"]
+
