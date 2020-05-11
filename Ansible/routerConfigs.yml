@@ -1,0 +1,24 @@
+---
+- name: "Play 1: Configuring Routers"
+  hosts: routers
+  connection: network_cli
+
+  tasks:
+    - name: "Task 1: Updating router names"
+      ios_config: 
+        lines: hostname {{ hostname.name }}
+    
+    - name: "Task 2: Appying eigrp"
+      ios_config:
+        src: "templates/eigrp.j2"
+        save_when: changed
+      notify: config_changed
+      register: cli_result
+
+  handlers: "Handler 1: Displaying changes"
+    - name:
+      listen: config_changed
+      debug:
+        msg: "{{ cli_result.commands }}"
+      
+        
