@@ -1,4 +1,3 @@
 ---
-ansible_network_os: "ios"
 ansible_user: "cisco"
 ansible_pass: "cisco"
