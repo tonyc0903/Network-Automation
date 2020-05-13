@@ -3,7 +3,7 @@
 - name: "PLAY 1: Show router configs and store result"
   #hosts refers to the routers group in the hosts.yml file
   hosts: routers
-  #connect 
+  #connection to the device
   connection: network_cli
   tasks:
     - name: "TASK 1: Get router interface config output from all routers"
@@ -17,12 +17,12 @@
       register: interface_result
 
     - name: "TASK 2: Print router interface configs"
-      #debug module is used for printing statements during execution
-      #the output will be in a json "ugly format" so Task 3 and 4 will fix thie issue
-      #by 
+      # debug module is used for printing statements during execution
+      # the output will be in a json "ugly format" so Task 3 and 4 will fix thie issue
       debug:
-        msg: {{ interface_result }}
+        msg: "{{ interface_result }}"
 
+      
     - name: "TASK 3: Create outputs/ folder"
       file:
         path: "outputs"
@@ -32,6 +32,7 @@
     - name: "TASK 4: Write output to file"
       copy:
         content: "{{ cli_result.stdout[0] }}\n"
+        # inventory_hostname is a special variable that that reflects to all the hosts in hots.yml
         dest: "outputs/{{ inventory_hostname }}.txt"
         #is the name of the hostname as configured in Ansible’s inventory host file. This can be useful when you’ve disabled fact-gathering, or you don’t want to rely on the discovered hostname
 
