@@ -3,7 +3,7 @@ In the process of practicing network automation with Python and other technologi
 
 This repository contain scripts for my network automation journey
 
-Helpful tips for me along the way (will update with tips daily):
+Helpful tips for me along the way (will update with tips whenever I can):
 
 `group_vars` - this folder contains a routers.yml for automating and inheriting variables at group level
 
