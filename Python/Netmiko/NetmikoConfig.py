@@ -48,5 +48,5 @@ for device in devices:
     else:
         print('EIGRP is already configured')
 
-    # disconnect from thr router
+    # disconnect from the router
     net_connect.disconnect()
