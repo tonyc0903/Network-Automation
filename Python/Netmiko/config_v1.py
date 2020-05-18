@@ -1,5 +1,5 @@
 """
-Program 3:
+Program:
     This program configures multiple cisco devices at a time by opening a file that consists
     the cisco commands and pushing the configs to the devices
 """
@@ -44,15 +44,15 @@ device5 = {
 # seperate cisco ios command text files so you can configure certain devices with different
 # configurations (useful when devices needs to have different configurations) 
 
-with open('commandFile1.txt') as f, open('commandFile2.txt') as b:
+with open('command_file1.txt') as f, open('command_file2.txt') as b:
     lines1 = f.read().splitlines()
     lines2 = b.read().splitlines()
 
 print('Group1 lists: \n')
-print (lines1)
+print (lines1) # prints the config in the file
 print('\n\n')
 print('Group2 lists: \n')
-print (lines2)
+print (lines2) # prints the config in the file
 
 
 group1_devices = [device3, device4, device5]
