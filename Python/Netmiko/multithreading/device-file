@@ -1,0 +1,7 @@
+192.168.122.71, cisco_ios, R1
+192.168.122.72, cisco_ios, SW1
+192.168.122.82, cisco_ios, SW2
+192.168.122.83, cisco_ios, SW3
+192.168.122.84, cisco_ios, SW4
+192.168.122.85, cisco_ios, SW5
+192.168.122.86, cisco_ios, SW6
