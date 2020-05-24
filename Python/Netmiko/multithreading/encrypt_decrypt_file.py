@@ -1,25 +1,27 @@
 from cryptography.fernet import Fernet
 
+
+###############################################################################
+#                                   FUNCTIONS                                 #
+###############################################################################
 def encryption(input_file, output_file, key):
-    with open(input_file, 'r') as f:
+    with open(input_file, 'rb') as f:
         data = f.read()
     fernet = Fernet(key)
     encrypted = fernet.encrypt(data)
 
-    print('Successfully encrypted file!')
     with open(output_file, 'wb') as f:
         f.write(encrypted)
 
 
-def decryption(input_file, output_file, key):
+def decryption(output_file, key):
     with open(output_file, 'rb') as f:
         data = f.read()
     fernet = Fernet(key)
     encrypted = fernet.decrypt(data)
-    
-    print('Successfully decrypted file!')
-    with open(input_file, 'wb') as f:
-        f.write(encrypted)
+
+    return encrypted
+
 
 def main():
 
@@ -36,12 +38,20 @@ def main():
     with open('key') as f:
         secret_key = f.read()
 
+    file_to_encrypt = 'device-creds' # afer running for the first time you can delete this file
+    encrypted_file = input('Enter file where encrypted information is written to (encrypted-device-creds by default): ') or 'encrypted-device-creds'
 
 
-    file_to_encrypt = 'device-creds'
-    file_to_decrypt = 'encrypted-device-creds'
-    encryption(file_to_encrypt, file_to_decrypt, secret_key)
-    decryption(file_to_encrypt, file_to_decrypt, secret_key)
+    
+    encryption(file_to_encrypt, encrypted_file, secret_key) # encrypts the device-creds file
+                                                            # After running this code for the first time, You can:
+                                                            # delete the device-file and comment out the function for safety purposes
 
+    decryption(encrypted_file, secret_key) #decrypts the encrypted file with the key
+
+
+###############################################################################
+#                                   MAIN                                      #
+###############################################################################
 if __name__ == "__main__":
     main()

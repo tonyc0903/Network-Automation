@@ -8,6 +8,9 @@ Can use concurrent.futures, just have to modify the main func a bit, will provid
 """
 # from concurrent.futures import ThreadPoolExecutor
 
+###############################################################################
+#                                   FUNCTIONS                                 #
+###############################################################################
 
 # encryption and decryption func using crypto library 
 def encryption(input_file, output_file, key):
@@ -27,12 +30,12 @@ def decryption(output_file, key):
 
     return encrypted
 
-#------------------------------------------------------------------------------
-def read_devices( devices_filename ):
+# function to read devices from the file
+def read_devices(devices_filename):
 
     devices = {}  # create our dictionary for storing devices and their info
 
-    with open( devices_filename ) as devices_file:
+    with open(devices_filename) as devices_file:
 
         for device_line in devices_file:
 
@@ -45,12 +48,12 @@ def read_devices( devices_filename ):
             devices[device['ipaddr']] = device  # store our device in the devices dictionary
                                                 # note the key for devices dictionary entries is ipaddr
 
-    print ('\n----- devices --------------------------')
-    pprint( devices )
+    print('\n###########------devices------###########')
+    pprint(devices)
 
     return devices
 
-#------------------------------------------------------------------------------
+# function to convert decrypted data into dictionaries of lists
 def data_to_dictLists(decrypted_data):
 
     decoded_data = decrypted_data.decode('utf-8') # decodes the decrypted data which is in bytes to strings
@@ -66,18 +69,19 @@ def data_to_dictLists(decrypted_data):
 
 
     device_creds = {addr:dev for addr, dev in zip(ip_address, device_creds_list)} # combine the two new lists into a dict of lists
-    print('\n----- device creds ---------------------')
+    print('\n###########------device creds------###########')
     pprint(device_creds)
 
     return device_creds
 
-#------------------------------------------------------------------------------
+# function to connect to all the devices to get config information
+# can also modify to write configs to devices!
 def get_write_config(device_and_creds):
 
     # For threadpool library we had to pass only one argument, so extract the two
     # pieces (device and creds) out of the one tuple passed.
     device = device_and_creds[0]
-    creds  = device_and_creds[1]
+    creds = device_and_creds[1]
 
     """
     [({'ipaddr': '192.168.122.71', 'name': ' R1', 'type': ' cisco_ios'},    # this is device_and_creds[0]
@@ -98,47 +102,48 @@ def get_write_config(device_and_creds):
 
 
 
-    #---- Connect to the device ----
-    if   device['type'] == 'junos-srx': device_type = 'juniper'
-    elif device['type'] == 'cisco-ios': device_type = 'cisco_ios'
-    elif device['type'] == 'cisco-xr':  device_type = 'cisco_xr'
-    else:                               device_type = 'cisco_ios'    # attempt Cisco IOS as default
+    # Connecting to the devices based on type
+    # can add more device appliances if needed
+    if   device['type'] == 'junos-srx': 
+        device_type = 'juniper'
+    elif device['type'] == 'cisco-ios': 
+        device_type = 'cisco_ios'
+    elif device['type'] == 'cisco-xr':  
+        device_type = 'cisco_xr'
+    else:                               
+        device_type = 'cisco_ios'    # attempt Cisco IOS as default
 
-    print ('---- Connecting to device {0}, username={1}, password={2}'.format( device['ipaddr'],
-                                                                                creds[1], creds[2] ))
+    print('#### Connecting to device {0}, username={1}, password={2}'.format(device['ipaddr'],
+                                                                                creds[1], creds[2]) + ' ####')
 
-    #---- Connect to the device
+    # Connect to the device
     session = ConnectHandler(device_type=device_type, ip=device['ipaddr'],
-                                                       username = creds[1], password = creds[2])
+                                                       username=creds[1], password=creds[2])
     
-
+    # sending commands to get device information based on its type
     if device_type == 'juniper':
-        #---- Use CLI command to get configuration data from device
         print ('---- Getting configuration from device ' + device['ipaddr'])
         session.send_command('configure terminal')
         config_data = session.send_command('show configuration')
 
     if device_type == 'cisco_ios':
-        #---- Use CLI command to get configuration data from device
         print ('---- Getting configuration from device ' + device['ipaddr'])
         config_data = session.send_command('show run')
-   
 
     if device_type == 'cisco_xr':
-        #---- Use CLI command to get configuration data from device
         print ('---- Getting configuration from device ' + device['ipaddr'])
         config_data = session.send_command('show configuration running-config')
 
-    #---- Write out configuration information to file
-    config_filename = 'config-' + device['ipaddr']  # Important - create unique configuration file name
+    # Write out configuration information to file for each devices
+    config_filename = 'config-' + device['ipaddr']
 
-    print ('---- Writing configuration: ', config_filename)
-    with open( config_filename, 'w' ) as config_out:  
+    print ('###### Writing configuration ######: ', config_filename)
+    with open(config_filename, 'w') as config_out:  
         config_out.write(config_data)
 
     session.disconnect()
 
-
+# main function to run multi threading
 def main():
     # generates a secrey key used for encrypting/decrypting
     # Uncomment the following block of code if you are running this for the first time! 
@@ -170,7 +175,7 @@ def main():
     creds = data_to_dictLists(decrypted_data) # convert the decrpyted data into dict of lists for easy reference 
 
     num_threads_str = input('\nNumber of threads (default is 5): ') or '5'
-    num_threads     = int(num_threads_str)
+    num_threads = int(num_threads_str)
 
     #creating list containing dictionaries of device info, and the list of credentials for that device 
     config_params_list = []
@@ -179,7 +184,7 @@ def main():
 
     starting_time = time()
 
-    print ('\n--- Creating threadpool, launching get config threads\n')
+    print('\n######## Creating threadpool, launching get config threads ########\n')
     threads = ThreadPool(num_threads)
     threads.map(get_write_config, config_params_list) # calls the get_write_config function with config_params_list as argument
 
@@ -197,8 +202,12 @@ def main():
         print(result)       # this will print None because i did not return any values in get_write_config function
     """
 
-    print ('\n---- End get config threadpool, elapsed time=', time()-starting_time)
+    print('\n######## End get config threadpool, elapsed time=', time()-starting_time + ' ########')
 
 
+###############################################################################
+#                                   MAIN                                      #
+###############################################################################
 if __name__ == "__main__":
     main()
+    
