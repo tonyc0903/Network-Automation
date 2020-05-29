@@ -1,14 +1,17 @@
 from dnacentersdk import api
 
-# Using Cisco DNA Center SDK to access DNA Center and collect a list of devices 
-# Similar to using HTTP get request from dna_api.py
+
+"""
+    This is a sample Python code that uses DNA Center's SDK to communicate with a DNA Center's
+    always on SandBox on Cisco DevNet to collect device information
+"""
+
 def main():
     dna_center_access = api.DNACenterAPI(username="devnetuser",
                         password="Cisco123!",
                         base_url="https://sandboxdnac.cisco.com/dna",)
 
     get_devices = dna_center_access.devices.get_device_list()
-
     for device_num, device in enumerate(get_devices['response']):
         device_type = device['type']
         device_ip = device['managementIpAddress']
@@ -17,8 +20,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-

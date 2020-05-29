@@ -1,6 +1,11 @@
 import requests
 import json
 
+"""
+    This is a sample Python code that uses REST API to communicate with DNA Center's
+    always on SandBox on Cisco DevNet to collect device information
+"""
+
 # getting token 
 def get_token():
 
