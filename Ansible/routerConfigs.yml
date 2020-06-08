@@ -1,5 +1,5 @@
 ---
-- name: "Play 1: Configuring Routers"
+- name: "Play 1: Configuring Routers with ios_config module and jinja2"
   hosts: routers
   connection: network_cli
 
@@ -8,7 +8,7 @@
       ios_config: 
         lines: hostname {{ hostname.name }}
     
-    - name: "Task 2: Appying eigrp"
+    - name: "Task 2: Applying eigrp"
       ios_config:
         src: "templates/eigrp.j2"
         save_when: changed
@@ -19,6 +19,7 @@
     - name:
       listen: config_changed
       debug:
+        # prints out the commands that were added to the configs
         msg: "{{ cli_result.commands }}"
       
         
