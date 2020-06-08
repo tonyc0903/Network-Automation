@@ -15,8 +15,8 @@
       notify: config_changed
       register: cli_result
 
-  handlers: "Handler 1: Displaying changes"
-    - name:
+  handlers:
+    - name: "Handler 1: Displaying changes"
       listen: config_changed
       debug:
         # prints out the commands that were added to the configs
