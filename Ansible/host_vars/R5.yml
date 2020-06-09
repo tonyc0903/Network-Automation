@@ -5,4 +5,3 @@ hostname:
 eigrp:
   num: 1
   network: ["10.1.4.0 0.0.0.3"]
-
