@@ -4,10 +4,12 @@
   connection: network_cli
 
   tasks:
+    # configure all router with hostname stated in host_vars folder
     - name: "Task 1: Updating router names"
       ios_config: 
         lines: hostname {{ hostname.name }}
-    
+
+    # configure all router with eigrp stated in host_vars folder
     - name: "Task 2: Applying eigrp"
       ios_config:
         src: "templates/eigrp.j2"
@@ -15,6 +17,7 @@
       notify: config_changed
       register: cli_result
 
+  # This will print changes only if it is not present, otherwise, nothing will be printed. (Idempotent)
   handlers:
     - name: "Handler 1: Displaying changes"
       listen: config_changed

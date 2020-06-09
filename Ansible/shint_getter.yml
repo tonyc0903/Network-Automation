@@ -8,7 +8,7 @@
   tasks:
     - name: "TASK 1: Get router interface config output from all routers"
       ios_command:
-        commands: "show interface brief"
+        commands: "show ip interface brief"
         # you can run multiple commands with the "-" before the command name and without quotes around it like so
         # commands:
         # - show version
@@ -30,7 +30,7 @@
     
     - name: "TASK 4: Write output to file"
       copy:
-        content: "{{ cli_result.stdout[0] }}\n"
+        content: "{{ interface_result.stdout[0] }}\n"
         # inventory_hostname is a special variable that that reflects to all the hosts in host.yml
         dest: "outputs/{{ inventory_hostname }}.txt"
         #is the name of the hostname as configured in Ansible’s inventory host file. This can be useful when you’ve disabled fact-gathering, or you don’t want to rely on the discovered hostname
